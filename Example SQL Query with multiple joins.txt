@@ -1,0 +1,52 @@
+USE [C115_robert.blanco221_gmail]
+GO
+/****** Object:  StoredProcedure [dbo].[Events_SelectByIdV2]    Script Date: 6/8/2022 3:47:52 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER proc [dbo].[Events_SelectByIdV2]
+		@Id int
+as
+
+/*--Test Code
+
+		Declare @Id int = 2;
+		Execute Events_SelectByIdV2 @Id
+	
+--*/
+
+BEGIN
+
+SELECT	 e.Id
+		,e.Name
+		,e.Headline
+		,e.Description
+		,e.Summary
+		,e.Slug
+		,e.StatusId
+		,e.DateAdded
+		,e.DateModified	
+		,e.Content1
+		,e.Title
+		,e.CreatedBy
+		,e.ModifiedBy
+		,e.ShortTitle
+		,e.ShortDescription
+		,d.DateStart
+		,d.DateEnd
+		,l.Address
+		,l.Latitude
+		,l.Longitude
+		,l.ZipCode
+		
+FROM dbo.Locations as l inner join dbo.EventLocations as el
+	ON el.LocationId = l.Id
+INNER JOIN dbo.Events as e
+	ON e.Id = el.EventId
+
+INNER JOIN dbo.Dates as d
+	ON d.EventId = e.Id
+WHERE @Id = e.Id
+
+END

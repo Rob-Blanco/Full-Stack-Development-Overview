@@ -1,0 +1,49 @@
+USE [C115_robert.blanco221_gmail]
+GO
+/****** Object:  StoredProcedure [dbo].[Friends_SelectByIdV3]    Script Date: 6/8/2022 3:45:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+		ALTER proc [dbo].[Friends_SelectByIdV3]
+				@Id int 
+
+as 
+
+/*		--Test Code
+		Declare 
+				@Id int = 367;
+		
+		Execute dbo.Friends_SelectByIdV3 @Id
+
+		
+*/
+
+		BEGIN
+
+		SELECT   f.Id
+				,i.Url
+				,i.Id	
+				,i.TypeId
+				,f.Title
+				,f.Bio
+				,f.Summary
+				,f.Headline
+				,f.Slug
+				,f.StatusId
+				,f.DateCreated
+				,f.DateModified
+				,f.UserId
+				,Skills = (	SELECT	s.Id
+									,s.Name
+							FROM	dbo.Skills as s inner join dbo.FriendSkills as fs
+									ON fs.SkillId = s.Id
+							WHERE f.Id = fs.FriendId
+							FOR JSON AUTO)
+
+		FROM dbo.Friends as f inner join dbo.Images as i
+			ON f.PrimaryImageId = i.Id
+		WHERE f.Id = @Id
+
+END
